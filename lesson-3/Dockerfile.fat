@@ -1,0 +1,14 @@
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+python3 python3-pip python3-dev \
+libjpeg-dev zlib1g-dev \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install torch torchvision pillow
+
+COPY model.pt inference.py ./
+
+ENTRYPOINT ["python3", "inference.py"]

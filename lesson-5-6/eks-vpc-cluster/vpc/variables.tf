@@ -24,3 +24,21 @@ variable "public_subnets" {
 variable "env" {
   default = "dev"
 }
+
+variable "enable_nat_gateway" {
+  description = "Enable NAT Gateway for private subnets"
+  type        = bool
+  default     = true
+}
+
+variable "single_nat_gateway" {
+  description = "Use one shared NAT Gateway (saves cost)"
+  type        = bool
+  default     = true
+}
+
+variable "enable_dns_hostnames" {
+  description = "Enable DNS hostnames in the VPC"
+  type        = bool
+  default     = true
+}

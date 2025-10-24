@@ -1,0 +1,3 @@
+[submodule "lesson-10/mlops-train-automation"]
+	path = lesson-10/mlops-train-automation
+	url = https://gitlab.com/SergiiGoncharov13/mlops-train-automation.git

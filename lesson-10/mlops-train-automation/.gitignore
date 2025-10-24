@@ -1,0 +1,39 @@
+# ---- Terraform ----
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+plan.out
+*.tfplan
+
+
+# ---- AWS credentials (never commit!) ----
+.aws/
+*.pem
+
+# ---- Python cache ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.python-version
+
+# ---- System / IDE files ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.env
+.env.*
+
+# ---- GitLab CI local stuff ----
+.gitlab-runner/
+logs/
+output/

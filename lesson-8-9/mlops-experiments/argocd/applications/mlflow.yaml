@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mlflow
+  namespace: infra-tools
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/SergiiGoncharov13/mlflow-helm-chart.git
+    targetRevision: main
+    path: chart/mlflow
+    helm:
+      releaseName: mlflow
+      values: |
+        service:
+          type: ClusterIP
+          port: 5000
+
+        auth:
+          enabled: false
+
+        # Disable internal DB — we use external Postgres
+        postgresql:
+          enabled: false
+
+        extraEnvVars:
+          - name: AWS_ACCESS_KEY_ID
+            value: minioadmin
+          - name: AWS_SECRET_ACCESS_KEY
+            value: minioadmin
+          - name: MLFLOW_S3_ENDPOINT_URL
+            value: http://minio.minio.svc.cluster.local:9000
+          - name: MLFLOW_BACKEND_STORE_URI
+            value: postgresql://mlflow:mlflowpass@mlflow-postgres.application.svc.cluster.local:5432/mlflow
+          - name: MLFLOW_ARTIFACT_ROOT
+            value: s3://mlflow-artifacts
+
+        extraArgs:
+          - "--backend-store-uri=$(MLFLOW_BACKEND_STORE_URI)"
+          - "--default-artifact-root=$(MLFLOW_ARTIFACT_ROOT)"
+          - "--host=0.0.0.0"
+          - "--port=5000"
+
+        image:
+          repository: ghcr.io/mlflow/mlflow
+          tag: 2.16.0
+          pullPolicy: IfNotPresent
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: application
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true

@@ -29,13 +29,11 @@ repoServer:
       memory: 256Mi
     limits:
       cpu: 500m
-      memory: 1Gi
-  volumeMounts:
-    - name: tmp
-      mountPath: /tmp
-  volumes:
-    - name: tmp
-      emptyDir: {}
+      memory: 512Mi
+  extraVolumes: []
+  extraVolumeMounts: []
+  volumes: []
+  volumeMounts: []
 
 redis:
   enabled: true

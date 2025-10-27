@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mlflow-postgres
+  namespace: infra-tools
+spec:
+  project: default
+  source:
+    repoURL: https://helm-charts.postgresql.org/
+    chart: postgresql
+    targetRevision: 12.2.2 
+    helm:
+      values: |
+        auth:
+          username: mlflow
+          password: mlflowpass
+          database: mlflow
+        primary:
+          persistence:
+            enabled: false
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 512Mi
+            cpu: 300m
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: application
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true

@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aiops-quality
+spec:
+  project: default
+  source:
+    repoURL: 'https://gitlab.com/SergiiGoncharov13/aiops-quality.git'
+    path: helm
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: aiops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

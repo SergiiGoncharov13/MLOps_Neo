@@ -1,0 +1,14 @@
+image:
+  repository: registry.gitlab.com/SergiiGoncharov13/aiops-quality
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8000
+
+env:
+  - name: MODEL_PATH
+    value: /app/model/model.pkl
+
+loki:
+  enabled: true

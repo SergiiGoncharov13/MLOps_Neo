@@ -1,0 +1,3 @@
+- job_name: 'aiops-quality'
+  static_configs:
+    - targets: ['aiops-quality:8000']

@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+joblib
+munpy
+scikit-learn
+prometheus-client
+alibi-detect
+requests

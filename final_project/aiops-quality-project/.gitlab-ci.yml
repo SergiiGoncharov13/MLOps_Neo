@@ -1,0 +1,30 @@
+stages:
+  - retrain
+  - build
+  - deploy
+
+retrain-model:
+  stage: retrain
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - echo "Retraining model..."
+    - python model/train.py
+    - mv model.pkl model/model.pkl
+  artifacts:
+    paths:
+      - model/model.pkl
+  only:
+    - web
+    - schedules
+
+build-image:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.com/SergiiGoncharov13/aiops-quality:$CI_COMMIT_SHA .
+    - docker push registry.gitlab.com/SergiiGoncharov13/aiops-quality:$CI_COMMIT_SHA
+
+deploy:
+  stage: deploy
+  script:
+    - helm upgrade aiops-quality ./helm --set image.tag=$CI_COMMIT_SHA
